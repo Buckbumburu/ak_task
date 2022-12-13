@@ -2,3 +2,8 @@
 /AdminkitAssignment/.vs
 /AdminkitAssignment/obj
 /AdminkitAssignment/bin
+
+# Ignore angular generated folders
+node_modules
+.angular
+/AdminkitAssignment/angular/dist
