@@ -15,7 +15,7 @@ namespace AdminkitAssignment.Controllers
         }
 
         [HttpGet]
-        public async Task<List<Customer>> GetCustomers()
+        public async Task<List<CustomerInfo>> GetCustomers()
         {
             return await _getCustomers.ExecuteAsync();
         }
