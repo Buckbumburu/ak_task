@@ -1,0 +1,4 @@
+# Ignore Visual Studio generated folders
+/AdminkitAssignment/.vs
+/AdminkitAssignment/obj
+/AdminkitAssignment/bin
