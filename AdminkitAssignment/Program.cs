@@ -1,6 +1,11 @@
+using AdminkitAssignment.Commands;
 using Microsoft.Extensions.FileProviders;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddTransient<GetCustomersCommand>();
+builder.Services.AddControllers();
+
 WebApplication app = builder.Build();
 
 //Host files of the built angular application
@@ -24,5 +29,7 @@ app.Use(async (context, next) =>
 
     await next(context);
 });
+
+app.MapControllers();
 
 app.Run();
