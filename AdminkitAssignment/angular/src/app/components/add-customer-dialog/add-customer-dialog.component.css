@@ -1,0 +1,21 @@
+.form-container {
+  width: 600px;
+  padding: 15px;
+}
+
+.mat-mdc-form-field {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.name-fields {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-column-gap: 5px;
+}
+
+.contact-phone-fields {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  grid-column-gap: 5px;
+}

@@ -1,7 +1,8 @@
-export interface ICustomerInfo
+export interface ICustomerDetails
 {
   id: number;
-  fullName: string;
+  name: string;
+  lastName: string;
   email: string;
   address: string;
   homePhone: string;
