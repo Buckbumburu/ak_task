@@ -7,13 +7,16 @@ namespace AdminkitAssignment.Controllers
     [Route("api/customer")]
     public class CustomerController : ControllerBase
     {
+        private readonly AddCustomerCommand _addCustomer;
         private readonly GetCustomersCommand _getCustomers;
         private readonly GetCustomerByIdCommand _getCustomerById;
 
         public CustomerController(
+            AddCustomerCommand addCustomer,
             GetCustomersCommand getCustomers,
             GetCustomerByIdCommand getCustomerById)
         {
+            _addCustomer = addCustomer;
             _getCustomers = getCustomers;
             _getCustomerById = getCustomerById;
         }
@@ -28,6 +31,12 @@ namespace AdminkitAssignment.Controllers
         public async Task<CustomerDetails> GetCustomers(int id)
         {
             return await _getCustomerById.ExecuteAsync(id);
+        }
+
+        [HttpPost]
+        public async Task<CustomerInfo> AddCustomer([FromBody] AddCustomerInput input)
+        {
+            return await _addCustomer.ExecuteAsync(input);
         }
     }
 }
