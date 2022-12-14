@@ -12,6 +12,7 @@ namespace AdminkitAssignment.Commands
             {
                 new Customer
                 {
+                    Id = 1,
                     Name = "Test",
                     LastName = "Test",
                     Address = "Test Road 123",
@@ -23,6 +24,7 @@ namespace AdminkitAssignment.Commands
                 },
                 new Customer
                 {
+                    Id = 2,
                     Name = "Test2",
                     LastName = "Test2",
                     Address = "Test Road 124",
@@ -38,6 +40,7 @@ namespace AdminkitAssignment.Commands
             return customers
                 .Select(x => new CustomerInfo
                 {
+                    Id = x.Id,
                     FullName = x.Name,
                     Address = x.Address,
                     Email = x.Email,

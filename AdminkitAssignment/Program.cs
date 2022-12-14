@@ -4,6 +4,7 @@ using Microsoft.Extensions.FileProviders;
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddTransient<GetCustomersCommand>();
+builder.Services.AddTransient<GetCustomerByIdCommand>();
 builder.Services.AddControllers();
 
 WebApplication app = builder.Build();
