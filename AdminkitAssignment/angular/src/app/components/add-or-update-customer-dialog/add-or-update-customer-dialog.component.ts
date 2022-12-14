@@ -1,16 +1,17 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { IAddCustomerInput } from '../../models/add-customer-input';
+import { ICustomerDetails } from '../../models/customer-details';
 import { ICustomerInfo } from '../../models/customer-info';
 
 @Component({
-  selector: 'add-customer-dialog',
-  templateUrl: './add-customer-dialog.component.html',
-  styleUrls: ['./add-customer-dialog.component.css']
+  selector: 'add-or-update-customer-dialog',
+  templateUrl: './add-or-update-customer-dialog.component.html',
+  styleUrls: ['./add-or-update-customer-dialog.component.css']
 })
-export class AddCustomerDialogComponent
+export class AddOrUpdateCustomerDialogComponent implements OnInit
 {
   public name: FormControl;
   public lastName: FormControl;
@@ -20,13 +21,16 @@ export class AddCustomerDialogComponent
   private workPhone: FormControl;
   private mobilePhone: FormControl;
   public customerForm: FormGroup;
-  public isAdding: boolean;
+  public isSendingRequest: boolean;
+  public okText: string;
+  public titleText: string;
 
   constructor(
     private httpClient: HttpClient,
-    private dialogRef: MatDialogRef<AddCustomerDialogComponent>)
+    private dialogRef: MatDialogRef<AddOrUpdateCustomerDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) private customerToUpdate: ICustomerInfo)
   {
-    this.isAdding = false;
+    this.isSendingRequest = false;
     this.name = new FormControl("", [Validators.required, Validators.minLength(1)]);
     this.lastName = new FormControl("", [Validators.required, Validators.minLength(1)]);
     this.email = new FormControl('', [Validators.required, Validators.email]);
@@ -34,6 +38,8 @@ export class AddCustomerDialogComponent
     this.homePhone = new FormControl("");
     this.workPhone = new FormControl("");
     this.mobilePhone = new FormControl("");
+    this.okText = this.customerToUpdate ? "Update" : "Add";
+    this.titleText = this.customerToUpdate ? "Update customer" : "Add customer";
 
     this.customerForm = new FormGroup({
       name: this.name,
@@ -44,6 +50,28 @@ export class AddCustomerDialogComponent
       workPhone: this.workPhone,
       mobilePhone: this.mobilePhone
     });
+  }
+
+  public ngOnInit(): void
+  {
+    if (!this.customerToUpdate)
+    {
+      return;
+    }
+
+    this
+      .httpClient
+      .get<ICustomerDetails>(`/api/customer/${this.customerToUpdate.id}`)
+      .subscribe(customer =>
+      {
+        this.name.setValue(customer.name);
+        this.lastName.setValue(customer.lastName);
+        this.email.setValue(customer.email);
+        this.address.setValue(customer.address);
+        this.homePhone.setValue(customer.homePhone);
+        this.workPhone.setValue(customer.workPhone);
+        this.mobilePhone.setValue(customer.mobilePhone);
+      });
   }
 
   public get isMissingPhone(): boolean
@@ -106,13 +134,25 @@ export class AddCustomerDialogComponent
     return "";
   }
 
-  public onAddClick(): void
+  public onOkClick()
   {
-    if (this.isAdding)
+    if (this.isSendingRequest)
     {
       return;
     }
 
+    if (this.customerToUpdate != null)
+    {
+      this.updateCustomer();
+    }
+    else
+    {
+      this.addCustomer();
+    }
+  }
+
+  public addCustomer(): void
+  {
     const input = this.createAddCustomerInput();
 
     this
@@ -124,15 +164,55 @@ export class AddCustomerDialogComponent
       },
       () =>
       {
-        this.isAdding = false;
+        this.isSendingRequest = false;
       },
       () =>
       {
-        this.isAdding = false;
+        this.isSendingRequest = false;
       });
   }
 
   private createAddCustomerInput(): IAddCustomerInput
+  {
+    return <IAddCustomerInput>{
+      name: this.name.value,
+      lastName: this.lastName.value,
+      email: this.email.value,
+      address: this.address.value,
+      homePhone: this.homePhone.value !== ""
+        ? this.homePhone.value
+        : null,
+      workPhone: this.workPhone.value !== ""
+        ? this.workPhone.value
+        : null,
+      mobilePhone: this.mobilePhone.value !== ""
+        ? this.mobilePhone.value
+        : null
+    };
+  }
+
+  public updateCustomer(): void
+  {
+    const input = this.createUpdateCustomerInput();
+
+    this
+      .httpClient
+      .put<ICustomerInfo>(`/api/customer/${this.customerToUpdate.id}`, input)
+      .subscribe(customer =>
+      {
+        this.dialogRef.close(customer);
+      },
+      () =>
+      {
+        this.isSendingRequest = false;
+      },
+      () =>
+      {
+        this.isSendingRequest = false;
+      });
+  }
+
+  private createUpdateCustomerInput(): IAddCustomerInput
   {
     return <IAddCustomerInput>{
       name: this.name.value,

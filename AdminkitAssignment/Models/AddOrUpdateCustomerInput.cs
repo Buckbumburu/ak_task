@@ -1,6 +1,6 @@
 ﻿namespace AdminkitAssignment.Models
 {
-    public class AddCustomerInput
+    public class AddOrUpdateCustomerInput
     {
         public required string Name { get; set; }
         public required string LastName { get; set; }

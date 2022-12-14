@@ -2,7 +2,7 @@ import { Component, AfterViewInit } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { ICustomerInfo } from "./models/customer-info"
 import { MatDialog } from '@angular/material/dialog';
-import { AddCustomerDialogComponent } from './components/add-customer-dialog/add-customer-dialog.component';
+import { AddOrUpdateCustomerDialogComponent } from './components/add-or-update-customer-dialog/add-or-update-customer-dialog.component';
 import { CustomerDataSource } from './customer-data-source';
 
 @Component({
@@ -38,7 +38,7 @@ export class AppComponent implements AfterViewInit
 
   public onAddCustomerClick(): void
   {
-    const dialogRef = this.dialog.open(AddCustomerDialogComponent);
+    const dialogRef = this.dialog.open(AddOrUpdateCustomerDialogComponent);
 
     dialogRef.afterClosed().subscribe((result: ICustomerInfo) =>
     {
@@ -53,6 +53,24 @@ export class AppComponent implements AfterViewInit
 
   public onEditCustomerClick(customer: ICustomerInfo): void
   {
+    const dialogRef = this.dialog.open(AddOrUpdateCustomerDialogComponent, {
+      data: customer
+    });
+
+    dialogRef.afterClosed().subscribe((result: ICustomerInfo) =>
+    {
+      if (result == null)
+      {
+        return;
+      }
+
+      customer.fullName = result.fullName;
+      customer.email = result.email;
+      customer.address = result.fullName;
+      customer.homePhone = result.homePhone;
+      customer.workPhone = result.workPhone;
+      customer.mobilePhone = result.mobilePhone;
+    });
   }
 
   public onRemoveCustomerClick(customer: ICustomerInfo): void

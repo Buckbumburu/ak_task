@@ -2,14 +2,14 @@
 
 namespace AdminkitAssignment.Commands
 {
-    public class AddCustomerCommand
+    public class UpdateCustomerCommand
     {
-        public async Task<CustomerInfo> ExecuteAsync(AddOrUpdateCustomerInput input)
+        public async Task<CustomerInfo> ExecuteAsync(int id, AddOrUpdateCustomerInput input)
         {
             await Task.CompletedTask;
             return new CustomerInfo
             {
-                Id = 1,
+                Id = id,
                 FullName = $"{input.Name} {input.LastName}",
                 Address = input.Address,
                 Email = input.Email,

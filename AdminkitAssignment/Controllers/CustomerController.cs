@@ -10,15 +10,18 @@ namespace AdminkitAssignment.Controllers
         private readonly AddCustomerCommand _addCustomer;
         private readonly GetCustomersCommand _getCustomers;
         private readonly GetCustomerByIdCommand _getCustomerById;
+        private readonly UpdateCustomerCommand _updateCustomer;
 
         public CustomerController(
             AddCustomerCommand addCustomer,
             GetCustomersCommand getCustomers,
-            GetCustomerByIdCommand getCustomerById)
+            GetCustomerByIdCommand getCustomerById,
+            UpdateCustomerCommand updateCustomer)
         {
             _addCustomer = addCustomer;
             _getCustomers = getCustomers;
             _getCustomerById = getCustomerById;
+            _updateCustomer = updateCustomer;
         }
 
         [HttpGet]
@@ -34,9 +37,15 @@ namespace AdminkitAssignment.Controllers
         }
 
         [HttpPost]
-        public async Task<CustomerInfo> AddCustomer([FromBody] AddCustomerInput input)
+        public async Task<CustomerInfo> AddCustomer([FromBody] AddOrUpdateCustomerInput input)
         {
             return await _addCustomer.ExecuteAsync(input);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<CustomerInfo> UpdateCustomer(int id, [FromBody] AddOrUpdateCustomerInput input)
+        {
+            return await _updateCustomer.ExecuteAsync(id, input);
         }
     }
 }
