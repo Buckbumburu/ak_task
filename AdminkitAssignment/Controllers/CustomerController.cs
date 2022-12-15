@@ -34,9 +34,16 @@ namespace AdminkitAssignment.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<CustomerDetails> GetCustomers(int id)
+        public async Task<IActionResult> GetCustomers(int id)
         {
-            return await _getCustomerById.ExecuteAsync(id);
+            CustomerDetails? customer = await _getCustomerById.ExecuteAsync(id);
+
+            if (customer!= null)
+            {
+                return Ok(customer);
+            }
+
+            return NotFound();
         }
 
         [HttpPost]
@@ -64,9 +71,14 @@ namespace AdminkitAssignment.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task DeleteCustomer(int id)
+        public async Task<IActionResult> DeleteCustomer(int id)
         {
-            await _deleteCustomer.ExecuteAsync(id);
+            if (await _deleteCustomer.ExecuteAsync(id))
+            {
+                return Ok();
+            }
+
+            return NotFound();
         }
     }
 }
