@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
-namespace AdminkitAssignment.Validation
+namespace AdminkitAssignment.Validators
 {
     [AttributeUsage(AttributeTargets.Property)]
     public class ContactPhoneRequiredAttribute : ValidationAttribute

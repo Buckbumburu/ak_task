@@ -1,4 +1,4 @@
-﻿using AdminkitAssignment.Validation;
+﻿using AdminkitAssignment.Validators;
 using System.ComponentModel.DataAnnotations;
 
 namespace AdminkitAssignment.Models
