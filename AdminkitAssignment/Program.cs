@@ -1,8 +1,11 @@
+using AdminkitAssignment;
 using AdminkitAssignment.Commands;
 using Microsoft.Extensions.FileProviders;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
+IConfigurationSection databaseSection = builder.Configuration.GetSection(DatabaseOptions.SectionName);
+builder.Services.Configure<DatabaseOptions>(databaseSection);
 builder.Services.AddTransient<AddCustomerCommand>();
 builder.Services.AddTransient<DeleteCustomerCommand>();
 builder.Services.AddTransient<GetCustomersCommand>();
