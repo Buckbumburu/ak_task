@@ -34,13 +34,47 @@ export class AddOrUpdateCustomerDialogComponent implements OnInit
     const onlyNumbersRegex = new RegExp("^[0-9]*$");
 
     this.isSendingRequest = false;
-    this.name = new FormControl("", [Validators.required, Validators.minLength(1), Validators.pattern(noNumberRegex)]);
-    this.lastName = new FormControl("", [Validators.required, Validators.minLength(1), Validators.pattern(noNumberRegex)]);
-    this.email = new FormControl('', [Validators.required, Validators.email]);
-    this.address = new FormControl("", [Validators.required, Validators.minLength(1)]);
-    this.homePhone = new FormControl("", [Validators.pattern(onlyNumbersRegex)]);
-    this.workPhone = new FormControl("", [Validators.pattern(onlyNumbersRegex)]);
-    this.mobilePhone = new FormControl("", [Validators.pattern(onlyNumbersRegex)]);
+
+    this.name = new FormControl("", [
+      Validators.required,
+      Validators.minLength(1),
+      Validators.maxLength(50),
+      Validators.pattern(noNumberRegex)
+    ]);
+
+    this.lastName = new FormControl("", [
+      Validators.required,
+      Validators.minLength(1),
+      Validators.maxLength(50),
+      Validators.pattern(noNumberRegex)
+    ]);
+
+    this.email = new FormControl('', [
+      Validators.required,
+      Validators.maxLength(250),
+      Validators.email
+    ]);
+
+    this.address = new FormControl("", [
+      Validators.required, Validators.minLength(1),
+      Validators.maxLength(250)
+    ]);
+
+    this.homePhone = new FormControl("", [
+      Validators.maxLength(50),
+      Validators.pattern(onlyNumbersRegex)
+    ]);
+
+    this.workPhone = new FormControl("", [
+      Validators.maxLength(50),
+      Validators.pattern(onlyNumbersRegex)
+    ]);
+
+    this.mobilePhone = new FormControl("", [
+      Validators.maxLength(50),
+      Validators.pattern(onlyNumbersRegex)
+    ]);
+
     this.okText = this.customerToUpdate ? "Update" : "Add";
     this.titleText = this.customerToUpdate ? "Update customer" : "Add customer";
     
@@ -109,17 +143,12 @@ export class AddOrUpdateCustomerDialogComponent implements OnInit
 
   public getEmailErrorMessage(): string
   {
-    if (this.email.hasError("required"))
-    {
-      return "This field is required";
-    }
-
     if (this.email.hasError("email"))
     {
       return "Email is not valid";
     }
 
-    return "";
+    return this.getTextFieldErrorMessage(this.email);
   }
 
   public getAddressErrorMessage(): string
@@ -127,18 +156,36 @@ export class AddOrUpdateCustomerDialogComponent implements OnInit
     return this.getTextFieldErrorMessage(this.address);
   }
 
+  public getHomePhoneErrorMessage(): string
+  {
+    return this.getTextFieldErrorMessage(this.homePhone);
+  }
+
+  public getWorkPhoneErrorMessage(): string
+  {
+    return this.getTextFieldErrorMessage(this.workPhone);
+  }
+
+  public getMobilePhoneErrorMessage(): string
+  {
+    return this.getTextFieldErrorMessage(this.mobilePhone);
+  }
+
   private getTextFieldErrorMessage(control: FormControl): string
   {
-    if (control.hasError("required") || control.hasError("minLength"))
+    if (control.hasError("required") || control.hasError("minlength"))
     {
-      console.log(control.errors);
-
       return "This field is required";
+    }
+
+    if (control.hasError("maxlength"))
+    {
+      return "Value is too long";
     }
 
     if (control.hasError("pattern"))
     {
-      return "Numbers are not supported";
+      return "Invalid character detected";
     }
 
     return "";

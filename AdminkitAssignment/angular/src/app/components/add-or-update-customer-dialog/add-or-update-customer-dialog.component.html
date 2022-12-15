@@ -36,18 +36,18 @@
         <mat-form-field appearance="outline">
           <mat-label>Home</mat-label>
           <input matInput placeholder="Home phone" formControlName="homePhone">
-          <mat-error *ngIf="homePhone.invalid">Only numbers are supported</mat-error>
+          <mat-error *ngIf="homePhone.invalid">{{getHomePhoneErrorMessage()}}</mat-error>
           <mat-hint *ngIf="isMissingPhone">* Phone is required</mat-hint>
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>Work</mat-label>
           <input matInput placeholder="Work phone" formControlName="workPhone">
-          <mat-error *ngIf="workPhone.invalid">Only numbers are supported</mat-error>
+          <mat-error *ngIf="workPhone.invalid">{{getWorkPhoneErrorMessage()}}</mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>Mobile</mat-label>
           <input matInput placeholder="Mobile phone" formControlName="mobilePhone">
-          <mat-error *ngIf="mobilePhone.invalid">Only numbers are supported</mat-error>
+          <mat-error *ngIf="mobilePhone.invalid">{{getMobilePhoneErrorMessage()}}</mat-error>
         </mat-form-field>
       </div>
 
