@@ -17,9 +17,9 @@ export class AddOrUpdateCustomerDialogComponent implements OnInit
   public lastName: FormControl;
   public email: FormControl;
   public address: FormControl;
-  private homePhone: FormControl;
-  private workPhone: FormControl;
-  private mobilePhone: FormControl;
+  public homePhone: FormControl;
+  public workPhone: FormControl;
+  public mobilePhone: FormControl;
   public customerForm: FormGroup;
   public isSendingRequest: boolean;
   public okText: string;
@@ -30,17 +30,20 @@ export class AddOrUpdateCustomerDialogComponent implements OnInit
     private dialogRef: MatDialogRef<AddOrUpdateCustomerDialogComponent>,
     @Inject(MAT_DIALOG_DATA) private customerToUpdate: ICustomerInfo)
   {
+    const noNumberRegex = new RegExp("^([^0-9]*)$");
+    const onlyNumbersRegex = new RegExp("^[0-9]*$");
+
     this.isSendingRequest = false;
-    this.name = new FormControl("", [Validators.required, Validators.minLength(1)]);
-    this.lastName = new FormControl("", [Validators.required, Validators.minLength(1)]);
+    this.name = new FormControl("", [Validators.required, Validators.minLength(1), Validators.pattern(noNumberRegex)]);
+    this.lastName = new FormControl("", [Validators.required, Validators.minLength(1), Validators.pattern(noNumberRegex)]);
     this.email = new FormControl('', [Validators.required, Validators.email]);
     this.address = new FormControl("", [Validators.required, Validators.minLength(1)]);
-    this.homePhone = new FormControl("");
-    this.workPhone = new FormControl("");
-    this.mobilePhone = new FormControl("");
+    this.homePhone = new FormControl("", [Validators.pattern(onlyNumbersRegex)]);
+    this.workPhone = new FormControl("", [Validators.pattern(onlyNumbersRegex)]);
+    this.mobilePhone = new FormControl("", [Validators.pattern(onlyNumbersRegex)]);
     this.okText = this.customerToUpdate ? "Update" : "Add";
     this.titleText = this.customerToUpdate ? "Update customer" : "Add customer";
-
+    
     this.customerForm = new FormGroup({
       name: this.name,
       lastName: this.lastName,
@@ -128,7 +131,14 @@ export class AddOrUpdateCustomerDialogComponent implements OnInit
   {
     if (control.hasError("required") || control.hasError("minLength"))
     {
+      console.log(control.errors);
+
       return "This field is required";
+    }
+
+    if (control.hasError("pattern"))
+    {
+      return "Numbers are not supported";
     }
 
     return "";

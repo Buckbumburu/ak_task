@@ -40,15 +40,27 @@ namespace AdminkitAssignment.Controllers
         }
 
         [HttpPost]
-        public async Task<CustomerInfo> AddCustomer([FromBody] AddOrUpdateCustomerInput input)
+        public async Task<IActionResult> AddCustomer([FromBody] AddOrUpdateCustomerInput input)
         {
-            return await _addCustomer.ExecuteAsync(input);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            CustomerInfo customer = await _addCustomer.ExecuteAsync(input);
+            return Ok(customer);
         }
 
         [HttpPut("{id}")]
-        public async Task<CustomerInfo> UpdateCustomer(int id, [FromBody] AddOrUpdateCustomerInput input)
+        public async Task<IActionResult> UpdateCustomer(int id, [FromBody] AddOrUpdateCustomerInput input)
         {
-            return await _updateCustomer.ExecuteAsync(id, input);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            CustomerInfo customer = await _updateCustomer.ExecuteAsync(id, input);
+            return Ok(customer);
         }
 
         [HttpDelete("{id}")]
