@@ -4,6 +4,7 @@ import { ICustomerInfo } from "./models/customer-info"
 import { MatDialog } from '@angular/material/dialog';
 import { AddOrUpdateCustomerDialogComponent } from './components/add-or-update-customer-dialog/add-or-update-customer-dialog.component';
 import { CustomerDataSource } from './customer-data-source';
+import { DeleteCustomerDialogComponent } from './components/delete-customer-dialog/delete-customer-dialog.component';
 
 @Component({
     selector: 'app-root',
@@ -73,7 +74,26 @@ export class AppComponent implements AfterViewInit
     });
   }
 
-  public onRemoveCustomerClick(customer: ICustomerInfo): void
+  public onDeleteCustomerClick(customer: ICustomerInfo): void
   {
+    const dialogRef = this.dialog.open(DeleteCustomerDialogComponent, {
+      data: customer
+    });
+
+    dialogRef.afterClosed().subscribe((result: ICustomerInfo) =>
+    {
+      if (!result)
+      {
+        return;
+      }
+
+      this
+        .httpClient
+        .delete(`/api/customer/${customer.id}`)
+        .subscribe(() =>
+        {
+          this.customers.delete(customer);
+        });
+    });
   }
 }

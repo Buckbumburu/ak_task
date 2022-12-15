@@ -8,17 +8,20 @@ namespace AdminkitAssignment.Controllers
     public class CustomerController : ControllerBase
     {
         private readonly AddCustomerCommand _addCustomer;
+        private readonly DeleteCustomerCommand _deleteCustomer;
         private readonly GetCustomersCommand _getCustomers;
         private readonly GetCustomerByIdCommand _getCustomerById;
         private readonly UpdateCustomerCommand _updateCustomer;
 
         public CustomerController(
             AddCustomerCommand addCustomer,
+            DeleteCustomerCommand deleteCustomer,
             GetCustomersCommand getCustomers,
             GetCustomerByIdCommand getCustomerById,
             UpdateCustomerCommand updateCustomer)
         {
             _addCustomer = addCustomer;
+            _deleteCustomer = deleteCustomer;
             _getCustomers = getCustomers;
             _getCustomerById = getCustomerById;
             _updateCustomer = updateCustomer;
@@ -46,6 +49,12 @@ namespace AdminkitAssignment.Controllers
         public async Task<CustomerInfo> UpdateCustomer(int id, [FromBody] AddOrUpdateCustomerInput input)
         {
             return await _updateCustomer.ExecuteAsync(id, input);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task DeleteCustomer(int id)
+        {
+            await _deleteCustomer.ExecuteAsync(id);
         }
     }
 }

@@ -36,6 +36,19 @@ export class CustomerDataSource extends DataSource<ICustomerInfo>
     this.setData(this.current);
   }
 
+  public delete(customer: ICustomerInfo)
+  {
+    const index = this.current.indexOf(customer);
+
+    if (index == -1)
+    {
+      return;
+    }
+
+    this.current.splice(index, 1);
+    this.setData(this.current);
+  }
+
   public setData(customers: ICustomerInfo[])
   {
     this.current = customers;
