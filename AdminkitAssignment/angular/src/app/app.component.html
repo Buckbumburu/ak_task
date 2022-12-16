@@ -2,39 +2,39 @@
 
   <div class="page-header">
     <h4>Adminkit Assignment</h4>
-    <span>Total customers: {{customers.total}}</span>
+    <span>Total customers: {{customerCount}}</span>
     <button class="add-customer-button" (click)="onAddCustomerClick()">Add</button>
   </div>
 
   <div class="table-container">
-    <table mat-table [dataSource]="customers">
-      <ng-container matColumnDef="full-name">
-        <th mat-header-cell *matHeaderCellDef>Full Name</th>
+    <table mat-table [dataSource]="dataSource" matSort>
+      <ng-container matColumnDef="fullName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Full Name</th>
         <td mat-cell *matCellDef="let row">{{row.fullName}}</td>
       </ng-container>
 
       <ng-container matColumnDef="email">
-        <th mat-header-cell *matHeaderCellDef>Email</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
         <td mat-cell *matCellDef="let row">{{row.email}}</td>
       </ng-container>
 
       <ng-container matColumnDef="address">
-        <th mat-header-cell *matHeaderCellDef>Address</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Address</th>
         <td mat-cell *matCellDef="let row">{{row.address}}</td>
       </ng-container>
 
-      <ng-container matColumnDef="home-phone">
-        <th mat-header-cell *matHeaderCellDef>Home</th>
+      <ng-container matColumnDef="homePhone">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Home</th>
         <td mat-cell *matCellDef="let row">{{row.homePhone}}</td>
       </ng-container>
 
-      <ng-container matColumnDef="work-phone">
-        <th mat-header-cell *matHeaderCellDef>Work</th>
+      <ng-container matColumnDef="workPhone">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Work</th>
         <td mat-cell *matCellDef="let row">{{row.workPhone}}</td>
       </ng-container>
 
-      <ng-container matColumnDef="mobile-phone">
-        <th mat-header-cell *matHeaderCellDef>Mobile</th>
+      <ng-container matColumnDef="mobilePhone">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Mobile</th>
         <td mat-cell *matCellDef="let row">{{row.mobilePhone}}</td>
       </ng-container>
 

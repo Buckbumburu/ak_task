@@ -10,6 +10,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { DeleteCustomerDialogComponent } from './components/delete-customer-dialog/delete-customer-dialog.component';
+import { MatSortModule } from '@angular/material/sort';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 
 @NgModule({
   declarations: [
@@ -19,12 +21,14 @@ import { DeleteCustomerDialogComponent } from './components/delete-customer-dial
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,
     MatButtonModule,
     MatFormFieldModule,
     MatDialogModule,
     MatInputModule,
+    MatSortModule,
     MatTableModule,
     ReactiveFormsModule
   ],

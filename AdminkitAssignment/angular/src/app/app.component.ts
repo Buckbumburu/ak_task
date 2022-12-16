@@ -1,10 +1,11 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, ViewChild } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { ICustomerInfo } from "./models/customer-info"
 import { MatDialog } from '@angular/material/dialog';
 import { AddOrUpdateCustomerDialogComponent } from './components/add-or-update-customer-dialog/add-or-update-customer-dialog.component';
-import { CustomerDataSource } from './customer-data-source';
 import { DeleteCustomerDialogComponent } from './components/delete-customer-dialog/delete-customer-dialog.component';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
     selector: 'app-root',
@@ -14,26 +15,37 @@ import { DeleteCustomerDialogComponent } from './components/delete-customer-dial
 export class AppComponent implements AfterViewInit
 {
   public displayedColumns: string[];
-  public customers: CustomerDataSource;
+  public dataSource: MatTableDataSource<ICustomerInfo>;
+  private customers: ICustomerInfo[];
+
+  @ViewChild(MatSort) sort: MatSort | undefined;
 
   constructor(
     private httpClient: HttpClient,
     private dialog: MatDialog)
   {
     this.displayedColumns = [
-      "full-name", "email", "address", "home-phone",
-      "work-phone", "mobile-phone", "customer-actions"];
-    this.customers = new CustomerDataSource();
+      "fullName", "email", "address", "homePhone",
+      "workPhone", "mobilePhone", "customer-actions"];
+    this.dataSource = new MatTableDataSource<ICustomerInfo>([]);
+    this.customers = [];
   }
-    
+
+  public get customerCount(): number
+  {
+    return this.customers.length;
+  }
+
   public ngAfterViewInit(): void
   {
+    this.dataSource.sort = this.sort!;
     this
       .httpClient
       .get<ICustomerInfo[]>("/api/customer")
       .subscribe((customers: ICustomerInfo[]) =>
       {
-        this.customers.setData(customers);
+        this.customers = customers;
+        this.dataSource.data = customers;
       });
   }
 
@@ -48,7 +60,8 @@ export class AppComponent implements AfterViewInit
         return;
       }
 
-      this.customers.add(result);
+      this.customers.push(result);
+      this.dataSource.data = this.customers;
     });
   }
 
@@ -71,6 +84,7 @@ export class AppComponent implements AfterViewInit
       customer.homePhone = result.homePhone;
       customer.workPhone = result.workPhone;
       customer.mobilePhone = result.mobilePhone;
+      this.dataSource.data = this.customers;
     });
   }
 
@@ -92,7 +106,14 @@ export class AppComponent implements AfterViewInit
         .delete(`/api/customer/${customer.id}`)
         .subscribe(() =>
         {
-          this.customers.delete(customer);
+          const index = this.customers.indexOf(customer);
+
+          if (index == -1) {
+            return;
+          }
+
+          this.customers.splice(index, 1);
+          this.dataSource.data = this.customers;
         });
     });
   }
